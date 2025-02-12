@@ -17,7 +17,6 @@ const authMiddleware = async (req, res, next) => {
     const username = data.user.user_metadata.user_name;
     const flags = await flagsmith.getIdentityFlags(username);
     const maxChallengeNumber = flags.getFeatureValue("challenge-number");
-    console.log(username, "Max challenge number: ", maxChallengeNumber);
     req.user = { ...data.user, maxChallenge: maxChallengeNumber };
     next();
 };

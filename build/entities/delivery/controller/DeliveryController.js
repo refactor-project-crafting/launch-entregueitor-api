@@ -1,22 +1,11 @@
 class DeliveryController {
-    constructor() {
+    deliveryRepository;
+    constructor(deliveryRepository) {
+        this.deliveryRepository = deliveryRepository;
         this.get = this.get.bind(this);
     }
-    async get(_req, res) {
-        const deliveries = [
-            {
-                id: 1,
-                challenge: 2,
-                name: "switch",
-                studentId: 1,
-            },
-            {
-                id: 2,
-                challenge: 2,
-                name: "bucles",
-                studentId: 1,
-            },
-        ];
+    async get(req, res) {
+        const deliveries = await this.deliveryRepository.getByChallenge(req.user.maxChallenge, req.user.id);
         res.status(200).json({ deliveries });
     }
 }
