@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { NextFunction, Response } from "express";
 import supabaseClient from "../../supabase/supabase.js";
 import { AuthRequest } from "./types.js";
+import flagsmith from "./flagsmith.js";
 
 const authMiddleware = async (
   req: AuthRequest,
@@ -26,7 +27,14 @@ const authMiddleware = async (
     return;
   }
 
-  req.user = data.user;
+  const username = data.user.user_metadata.user_name;
+
+  const flags = await flagsmith.getIdentityFlags(username);
+  const maxChallengeNumber = flags.getFeatureValue("challenge-number");
+
+  console.log(username, "Max challenge number: ", maxChallengeNumber);
+
+  req.user = { ...data.user, maxChallenge: maxChallengeNumber };
 
   next();
 };
