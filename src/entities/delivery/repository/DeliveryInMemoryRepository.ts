@@ -6,13 +6,13 @@ class DeliveryInMemoryRepository implements DeliveryRepository {
   private readonly deliveries: Delivery[] = [
     {
       id: "a",
-      challenge: 4,
+      challenge: 1,
       name: "switch",
       studentId: "a8f0cbef-a9d6-4d19-bd5e-cd82dd4557ba",
     },
     {
       id: "b",
-      challenge: 4,
+      challenge: 1,
       name: "bucles",
       studentId: "a8f0cbef-a9d6-4d19-bd5e-cd82dd4557bb",
     },

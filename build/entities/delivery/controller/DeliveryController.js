@@ -5,7 +5,8 @@ class DeliveryController {
         this.get = this.get.bind(this);
     }
     async get(req, res) {
-        const deliveries = await this.deliveryRepository.getByChallenge(req.user.maxChallenge, req.user.id);
+        const { challengeNumber } = req.params;
+        const deliveries = await this.deliveryRepository.getByChallenge(Number(challengeNumber), req.user.id);
         res.status(200).json({ deliveries });
     }
 }

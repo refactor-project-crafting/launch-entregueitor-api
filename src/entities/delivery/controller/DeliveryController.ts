@@ -1,16 +1,20 @@
 import { Response } from "express";
-import { DeliveryControllerStructure } from "./types.js";
+import {
+  AuthRequestWithChallenge,
+  DeliveryControllerStructure,
+} from "./types.js";
 import DeliveryRepository from "../repository/types.js";
-import { AuthRequest } from "../../../auth/middlewares/types.js";
 
 class DeliveryController implements DeliveryControllerStructure {
   constructor(private deliveryRepository: DeliveryRepository) {
     this.get = this.get.bind(this);
   }
 
-  async get(req: AuthRequest, res: Response): Promise<void> {
+  async get(req: AuthRequestWithChallenge, res: Response): Promise<void> {
+    const { challengeNumber } = req.params;
+
     const deliveries = await this.deliveryRepository.getByChallenge(
-      req.user.maxChallenge,
+      Number(challengeNumber),
       req.user.id
     );
 
