@@ -6,5 +6,6 @@ const deliveriesRouter = Router();
 const deliveryRepository = new DeliveryInMemoryRepository();
 const deliveryController = new DeliveryController(deliveryRepository);
 deliveriesRouter.get("/:challengeNumber", checkChallenge, deliveryController.get);
+deliveriesRouter.post("/:challengeNumber", checkChallenge, deliveryController.post);
 export default deliveriesRouter;
 //# sourceMappingURL=deliveriesRouter.js.map

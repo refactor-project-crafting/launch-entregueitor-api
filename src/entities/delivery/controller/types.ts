@@ -1,10 +1,23 @@
 import { Response } from "express";
 import { AuthRequest } from "../../../auth/middlewares/types.js";
+import { Query } from "express-serve-static-core";
+import { DeliveryType } from "../types.js";
 
-export type AuthRequestWithChallenge = AuthRequest<{
-  challengeNumber: string;
-}>;
+export type AuthRequestWithChallenge<
+  BodyType = Record<string, unknown>,
+  Params = Query
+> = AuthRequest<
+  {
+    challengeNumber: string;
+  },
+  BodyType,
+  Params
+>;
 
 export interface DeliveryControllerStructure {
   get(req: AuthRequestWithChallenge, res: Response): Promise<void>;
+  post(
+    req: AuthRequestWithChallenge<{ type: DeliveryType }>,
+    res: Response
+  ): Promise<void>;
 }

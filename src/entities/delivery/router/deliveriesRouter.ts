@@ -13,5 +13,10 @@ deliveriesRouter.get(
   checkChallenge,
   deliveryController.get
 );
+deliveriesRouter.post(
+  "/:challengeNumber",
+  checkChallenge,
+  deliveryController.post
+);
 
 export default deliveriesRouter;
