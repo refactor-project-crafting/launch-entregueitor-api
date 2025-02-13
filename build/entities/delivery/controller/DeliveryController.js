@@ -13,9 +13,12 @@ class DeliveryController {
     async post(req, res) {
         const { challengeNumber } = req.params;
         const { type } = req.query;
-        const deliveryData = { ...req.body, type, challengeNumber };
+        const deliveryData = {
+            ...req.body,
+            type: "text",
+            challenge: Number(challengeNumber),
+        };
         if (isTextDelivery(deliveryData, type)) {
-            deliveryData.text = ",";
             const newTextDelivery = await this.deliveryRepository.addTextDelivery(deliveryData);
             res.status(201).json({ newDelivery: newTextDelivery });
         }

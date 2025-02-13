@@ -4,7 +4,7 @@ class DeliveryInMemoryRepository {
     deliveries = [
         {
             id: "a",
-            challenge: 1,
+            challenge: 2,
             name: "switch",
             type: "text",
             date: "2025-02-13T09:17:24.384Z",
@@ -12,7 +12,7 @@ class DeliveryInMemoryRepository {
         },
         {
             id: "b",
-            challenge: 1,
+            challenge: 2,
             name: "bucles",
             type: "text",
             date: "2025-02-11T09:17:24.384Z",
@@ -25,8 +25,9 @@ class DeliveryInMemoryRepository {
     }
     async addTextDelivery(deliveryData) {
         const newDelivery = {
-            id: crypto.randomUUID(),
             ...deliveryData,
+            id: crypto.randomUUID(),
+            date: new Date(),
         };
         this.deliveries.push(convertDeliveryToDeliveryDto(newDelivery));
         return Promise.resolve(newDelivery);

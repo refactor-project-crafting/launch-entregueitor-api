@@ -12,7 +12,7 @@ class DeliveryInMemoryRepository implements DeliveryRepository {
   private readonly deliveries: DeliveryDto[] = [
     {
       id: "a",
-      challenge: 1,
+      challenge: 2,
       name: "switch",
       type: "text",
       date: "2025-02-13T09:17:24.384Z",
@@ -20,7 +20,7 @@ class DeliveryInMemoryRepository implements DeliveryRepository {
     },
     {
       id: "b",
-      challenge: 1,
+      challenge: 2,
       name: "bucles",
       type: "text",
       date: "2025-02-11T09:17:24.384Z",
@@ -44,8 +44,9 @@ class DeliveryInMemoryRepository implements DeliveryRepository {
     deliveryData: WithoutId<TextDelivery>
   ): Promise<TextDelivery> {
     const newDelivery: TextDelivery = {
-      id: crypto.randomUUID(),
       ...deliveryData,
+      id: crypto.randomUUID(),
+      date: new Date(),
     };
 
     this.deliveries.push(convertDeliveryToDeliveryDto(newDelivery));

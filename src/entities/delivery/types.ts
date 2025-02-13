@@ -1,6 +1,6 @@
 import { Id } from "../../types.js";
 
-export const deliveryTypes = ["text", "long_text", "url", "file"] as const;
+export const deliveryTypes = ["text", "url", "file"] as const;
 export type DeliveryType = (typeof deliveryTypes)[number];
 
 export interface Delivery {
@@ -13,7 +13,7 @@ export interface Delivery {
 }
 
 export interface TextDelivery extends Delivery {
-  type: Extract<DeliveryType, "text" | "long_text">;
+  type: Extract<DeliveryType, "text">;
   text: string;
 }
 

@@ -1,2 +1,2 @@
-export const deliveryTypes = ["text", "long_text", "url", "file"];
+export const deliveryTypes = ["text", "url", "file"];
 //# sourceMappingURL=types.js.map

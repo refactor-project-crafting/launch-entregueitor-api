@@ -39,11 +39,13 @@ class DeliveryController implements DeliveryControllerStructure {
     const { challengeNumber } = req.params;
     const { type } = req.query;
 
-    const deliveryData = { ...req.body, type, challengeNumber };
+    const deliveryData: WithoutId<FullDelivery> = {
+      ...req.body,
+      type: "text",
+      challenge: Number(challengeNumber),
+    };
 
     if (isTextDelivery(deliveryData, type)) {
-      deliveryData.text = ",";
-
       const newTextDelivery = await this.deliveryRepository.addTextDelivery(
         deliveryData
       );
