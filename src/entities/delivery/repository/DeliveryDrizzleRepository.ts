@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { Id, WithoutId } from "../../../types.js";
-import { Delivery, TextDelivery } from "../types.js";
+import { Delivery, TextDelivery, UrlDelivery } from "../types.js";
 import DeliveryRepository from "./types.js";
 import { convertDeliveryDtoToDelivery } from "../dto/mappers.js";
 import { db } from "../../../database/index.js";
@@ -12,6 +12,7 @@ import { exercises as exercisesTable } from "../../exercise/schema/exercises.js"
 class DeliveryDrizzleRepository implements DeliveryRepository {
   public async getByChallenge(
     challengeNumber: number,
+    exerciseId: Id,
     userId: Id
   ): Promise<Delivery[]> {
     const deliveriesDto: DeliveryDto[] = await db
@@ -27,7 +28,8 @@ class DeliveryDrizzleRepository implements DeliveryRepository {
       .where(
         and(
           eq(deliveriesTable.studentId, userId),
-          eq(deliveriesTable.challenge, challengeNumber)
+          eq(deliveriesTable.challenge, challengeNumber),
+          eq(deliveriesTable.exerciseId, exerciseId)
         )
       );
 
@@ -39,6 +41,25 @@ class DeliveryDrizzleRepository implements DeliveryRepository {
     deliveryData: WithoutId<TextDelivery>
   ): Promise<TextDelivery> {
     const newDelivery: TextDelivery = {
+      ...deliveryData,
+      id: crypto.randomUUID(),
+      studentId: userId,
+      date: new Date(),
+    };
+
+    await db.insert(deliveriesTable).values({
+      ...newDelivery,
+      date: newDelivery.date.toISOString(),
+    });
+
+    return newDelivery;
+  }
+
+  public async addUrlDelivery(
+    userId: Id,
+    deliveryData: WithoutId<UrlDelivery>
+  ): Promise<UrlDelivery> {
+    const newDelivery: UrlDelivery = {
       ...deliveryData,
       id: crypto.randomUUID(),
       studentId: userId,

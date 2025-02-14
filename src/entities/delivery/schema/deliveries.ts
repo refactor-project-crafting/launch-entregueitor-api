@@ -8,4 +8,7 @@ export const deliveries = pgTable("deliveries", {
   date: date().notNull(),
   studentId: varchar().notNull(),
   exerciseId: varchar().notNull(),
+  text: varchar(),
+  url: varchar(),
+  filename: varchar(),
 });

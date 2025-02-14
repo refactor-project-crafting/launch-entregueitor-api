@@ -1,12 +1,20 @@
 import { Id, WithoutId } from "../../../types.js";
-import { Delivery, TextDelivery } from "../types.js";
+import { Delivery, TextDelivery, UrlDelivery } from "../types.js";
 
 export interface DeliveryRepository {
-  getByChallenge(challengeNumber: number, userId: Id): Promise<Delivery[]>;
+  getByChallenge(
+    challengeNumber: number,
+    exerciseId: Id,
+    userId: Id
+  ): Promise<Delivery[]>;
   addTextDelivery(
     userId: Id,
     deliveryData: WithoutId<TextDelivery>
   ): Promise<TextDelivery>;
+  addUrlDelivery(
+    userId: Id,
+    deliveryData: WithoutId<UrlDelivery>
+  ): Promise<UrlDelivery>;
 }
 
 export default DeliveryRepository;

@@ -1,15 +1,25 @@
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db } from "../../../database/index.js";
 import { exercises as exercisesTable } from "../schema/exercises.js";
 import { ExerciseStructure } from "../types.js";
 import { ExerciseRepository } from "./types.js";
 
 class ExerciseDrizzleRepository implements ExerciseRepository {
+  public async getByChallenge(challenge: number): Promise<ExerciseStructure[]> {
+    const exercises: ExerciseStructure[] = await db
+      .select()
+      .from(exercisesTable)
+      .where(eq(exercisesTable.challenge, challenge))
+      .orderBy(asc(exercisesTable.position));
+
+    return exercises;
+  }
+
   public async getExerciseByChallengeAndPosition(
     challenge: number,
     position: number
   ): Promise<ExerciseStructure> {
-    const exercises = await db
+    const exercises: ExerciseStructure[] = await db
       .select()
       .from(exercisesTable)
       .where(
@@ -19,11 +29,13 @@ class ExerciseDrizzleRepository implements ExerciseRepository {
         )
       );
 
-    if (!exercises[0]) {
+    const exercise = exercises[0];
+
+    if (!exercise) {
       throw new Error("Exercise not found");
     }
 
-    return Promise.resolve(exercises[0]);
+    return exercise;
   }
 }
 

@@ -4,13 +4,9 @@ import {
   DeliveryControllerStructure,
 } from "./types.js";
 import DeliveryRepository from "../repository/types.js";
-import {
-  Delivery,
-  DeliveryType,
-  FullDelivery,
-  TextDelivery,
-} from "../types.js";
+import { DeliveryType, FullDelivery } from "../types.js";
 import { WithoutId } from "../../../types.js";
+import { isTextDelivery, isUrlDelivery } from "../predicates.js";
 
 class DeliveryController implements DeliveryControllerStructure {
   constructor(private deliveryRepository: DeliveryRepository) {
@@ -18,11 +14,16 @@ class DeliveryController implements DeliveryControllerStructure {
     this.post = this.post.bind(this);
   }
 
-  async get(req: AuthRequestWithChallenge, res: Response): Promise<void> {
+  async get(
+    req: AuthRequestWithChallenge<unknown, { exerciseId: string }>,
+    res: Response
+  ): Promise<void> {
     const { challengeNumber } = req.params;
+    const { exerciseId } = req.query;
 
     const deliveries = await this.deliveryRepository.getByChallenge(
       Number(challengeNumber),
+      exerciseId,
       req.user.id
     );
 
@@ -41,27 +42,31 @@ class DeliveryController implements DeliveryControllerStructure {
 
     const deliveryData: WithoutId<FullDelivery> = {
       ...req.body,
-      type: "text",
+      type,
       challenge: Number(challengeNumber),
       exerciseId,
     };
 
-    if (isTextDelivery(deliveryData, type)) {
+    if (isTextDelivery(deliveryData)) {
       const newTextDelivery = await this.deliveryRepository.addTextDelivery(
         req.user.id,
         deliveryData
       );
 
       res.status(201).json({ newDelivery: newTextDelivery });
+      return;
+    }
+
+    if (isUrlDelivery(deliveryData)) {
+      const newUrlDelivery = await this.deliveryRepository.addUrlDelivery(
+        req.user.id,
+        deliveryData
+      );
+
+      res.status(201).json({ newDelivery: newUrlDelivery });
+      return;
     }
   }
 }
-
-const isTextDelivery = (
-  delivery: Partial<Delivery>,
-  type: DeliveryType
-): delivery is TextDelivery => {
-  return type === "text";
-};
 
 export default DeliveryController;

@@ -6,5 +6,6 @@ export interface ExerciseStructure {
   name: string;
   challenge: number;
   position: number;
+  comments: string;
   type: DeliveryType;
 }

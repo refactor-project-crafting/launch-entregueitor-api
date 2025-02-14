@@ -15,7 +15,10 @@ export type AuthRequestWithChallenge<
 >;
 
 export interface DeliveryControllerStructure {
-  get(req: AuthRequestWithChallenge, res: Response): Promise<void>;
+  get(
+    req: AuthRequestWithChallenge<unknown, { exerciseId: string }>,
+    res: Response
+  ): Promise<void>;
   post(
     req: AuthRequestWithChallenge<{ type: DeliveryType }>,
     res: Response
