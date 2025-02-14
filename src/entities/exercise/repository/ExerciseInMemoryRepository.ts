@@ -1,8 +1,11 @@
-import { Exercise } from "../types.js";
+import { and, eq } from "drizzle-orm";
+import { db } from "../../../database/index.js";
+import { exercises as exercisesTable } from "../schema/exercises.js";
+import { ExerciseStructure } from "../types.js";
 import { ExerciseRepository } from "./types.js";
 
 class ExerciseInMemoryRepository implements ExerciseRepository {
-  private readonly exercises: Exercise[] = [
+  private readonly exercises: ExerciseStructure[] = [
     {
       id: "asdf",
       challenge: 2,
@@ -22,17 +25,22 @@ class ExerciseInMemoryRepository implements ExerciseRepository {
   public async getExerciseByChallengeAndPosition(
     challenge: number,
     position: number
-  ): Promise<Exercise> {
-    const exercise = this.exercises.find(
-      (exercise) =>
-        exercise.challenge === challenge && exercise.position === position
-    );
+  ): Promise<ExerciseStructure> {
+    const exercises = await db
+      .select()
+      .from(exercisesTable)
+      .where(
+        and(
+          eq(exercisesTable.challenge, challenge),
+          eq(exercisesTable.position, position)
+        )
+      );
 
-    if (!exercise) {
+    if (!exercises[0]) {
       throw new Error("Exercise not found");
     }
 
-    return Promise.resolve(exercise);
+    return Promise.resolve(exercises[0]);
   }
 }
 

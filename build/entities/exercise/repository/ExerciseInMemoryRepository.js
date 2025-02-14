@@ -1,3 +1,6 @@
+import { and, eq } from "drizzle-orm";
+import { db } from "../../../database/index.js";
+import { exercises as exercisesTable } from "../schema/exercises.js";
 class ExerciseInMemoryRepository {
     exercises = [
         {
@@ -16,11 +19,14 @@ class ExerciseInMemoryRepository {
         },
     ];
     async getExerciseByChallengeAndPosition(challenge, position) {
-        const exercise = this.exercises.find((exercise) => exercise.challenge === challenge && exercise.position === position);
-        if (!exercise) {
+        const exercises = await db
+            .select()
+            .from(exercisesTable)
+            .where(and(eq(exercisesTable.challenge, challenge), eq(exercisesTable.position, position)));
+        if (!exercises[0]) {
             throw new Error("Exercise not found");
         }
-        return Promise.resolve(exercise);
+        return Promise.resolve(exercises[0]);
     }
 }
 export default ExerciseInMemoryRepository;

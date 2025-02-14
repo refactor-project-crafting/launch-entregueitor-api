@@ -11,7 +11,8 @@ class ExerciseController {
             const exercise = await this.exerciseRepository.getExerciseByChallengeAndPosition(Number(challenge), Number(position));
             res.status(200).json({ exercise });
         }
-        catch {
+        catch (error) {
+            console.log(error.message);
             res.status(404).json({ error: "Exercise not found" });
         }
     }

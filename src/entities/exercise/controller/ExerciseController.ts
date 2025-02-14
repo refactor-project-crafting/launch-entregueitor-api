@@ -25,7 +25,8 @@ class ExerciseController implements ExerciseControllerStructure {
         );
 
       res.status(200).json({ exercise });
-    } catch {
+    } catch (error: unknown) {
+      console.log((error as Error).message);
       res.status(404).json({ error: "Exercise not found" });
     }
   }
