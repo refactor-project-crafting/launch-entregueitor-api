@@ -1,10 +1,10 @@
 import { Router } from "express";
-import ExerciseInMemoryRepository from "../repository/ExerciseInMemoryRepository.js";
+import ExerciseDrizzleRepository from "../repository/ExerciseDrizzleRepository.js";
 import ExerciseController from "../controller/ExerciseController.js";
 
 const exercisesRouter = Router();
 
-const exerciseRepository = new ExerciseInMemoryRepository();
+const exerciseRepository = new ExerciseDrizzleRepository();
 const exerciseController = new ExerciseController(exerciseRepository);
 
 exercisesRouter.get("/one", exerciseController.getOneByChallengeAndPosition);

@@ -4,24 +4,7 @@ import { exercises as exercisesTable } from "../schema/exercises.js";
 import { ExerciseStructure } from "../types.js";
 import { ExerciseRepository } from "./types.js";
 
-class ExerciseInMemoryRepository implements ExerciseRepository {
-  private readonly exercises: ExerciseStructure[] = [
-    {
-      id: "asdf",
-      challenge: 2,
-      position: 3,
-      name: "r2-recorrer-arrays",
-      type: "text",
-    },
-    {
-      id: "adeewf",
-      challenge: 2,
-      position: 1,
-      name: "r2-yoquese",
-      type: "text",
-    },
-  ];
-
+class ExerciseDrizzleRepository implements ExerciseRepository {
   public async getExerciseByChallengeAndPosition(
     challenge: number,
     position: number
@@ -44,4 +27,4 @@ class ExerciseInMemoryRepository implements ExerciseRepository {
   }
 }
 
-export default ExerciseInMemoryRepository;
+export default ExerciseDrizzleRepository;

@@ -6,10 +6,10 @@ export type DeliveryType = (typeof deliveryTypes)[number];
 export interface Delivery {
   id: Id;
   challenge: number;
-  name: string;
   date: Date;
   type: DeliveryType;
   studentId: Id;
+  exerciseId: Id;
 }
 
 export interface TextDelivery extends Delivery {

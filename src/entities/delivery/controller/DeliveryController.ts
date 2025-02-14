@@ -32,21 +32,23 @@ class DeliveryController implements DeliveryControllerStructure {
   async post(
     req: AuthRequestWithChallenge<
       WithoutId<FullDelivery>,
-      { type: DeliveryType }
+      { type: DeliveryType; exerciseId: string }
     >,
     res: Response
   ): Promise<void> {
     const { challengeNumber } = req.params;
-    const { type } = req.query;
+    const { type, exerciseId } = req.query;
 
     const deliveryData: WithoutId<FullDelivery> = {
       ...req.body,
       type: "text",
       challenge: Number(challengeNumber),
+      exerciseId,
     };
 
     if (isTextDelivery(deliveryData, type)) {
       const newTextDelivery = await this.deliveryRepository.addTextDelivery(
+        req.user.id,
         deliveryData
       );
 

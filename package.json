@@ -1,7 +1,7 @@
 {
   "name": "launch-entregueitor-api",
   "version": "1.0.0",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build:dev": "tsc -w",
     "build": "tsc",

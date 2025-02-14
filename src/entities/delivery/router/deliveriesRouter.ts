@@ -1,11 +1,11 @@
 import { Router } from "express";
 import DeliveryController from "../controller/DeliveryController.js";
-import DeliveryInMemoryRepository from "../repository/DeliveryInMemoryRepository.js";
+import DeliveryDrizzleRepository from "../repository/DeliveryDrizzleRepository.js";
 import checkChallenge from "../middleware/checkChallenge.js";
 
 const deliveriesRouter = Router();
 
-const deliveryRepository = new DeliveryInMemoryRepository();
+const deliveryRepository = new DeliveryDrizzleRepository();
 const deliveryController = new DeliveryController(deliveryRepository);
 
 deliveriesRouter.get(

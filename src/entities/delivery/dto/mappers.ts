@@ -21,13 +21,15 @@ export const convertDeliveryDtoToDelivery = (
 };
 
 export const convertDeliveryToDeliveryDto = (
-  delivery: Delivery
+  delivery: Delivery,
+  exerciseName: string
 ): DeliveryDto => {
   const { date, ...deliveryData } = delivery;
 
   const deliveryDto: DeliveryDto = {
     ...deliveryData,
     date: date.toISOString(),
+    exerciseName,
   };
 
   return deliveryDto;
