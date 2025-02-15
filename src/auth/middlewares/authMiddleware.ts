@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { NextFunction, Response } from "express";
-import supabaseClient from "../../supabase/supabase.js";
+import supabaseAuthClient from "../supabase/supabaseAuth.js";
 import { AuthRequest } from "./types.js";
 import flagsmith from "./flagsmith.js";
 
@@ -20,7 +20,7 @@ const authMiddleware = async (
 
   const token = authHeader.replace("Bearer ", "");
 
-  const { data, error } = await supabaseClient.auth.getUser(token);
+  const { data, error } = await supabaseAuthClient.auth.getUser(token);
 
   if (error || !data.user) {
     res.status(401).json({ error: "Invalid token" });

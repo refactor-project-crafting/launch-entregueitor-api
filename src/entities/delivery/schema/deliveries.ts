@@ -1,7 +1,9 @@
 import { deliveryTypes } from "../types.js";
 import { date, integer, pgEnum, pgTable, varchar } from "drizzle-orm/pg-core";
 
-export const deliveries = pgTable("deliveries", {
+const tableName = process.env.PROMO! + "_deliveries";
+
+export const deliveries = pgTable(tableName, {
   id: varchar().primaryKey(),
   challenge: integer().notNull(),
   type: pgEnum("delivery_type", deliveryTypes)().notNull(),
