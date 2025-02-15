@@ -23,4 +23,8 @@ export interface DeliveryControllerStructure {
     req: AuthRequestWithChallenge<{ type: DeliveryType }>,
     res: Response
   ): Promise<void>;
+  postFile(
+    req: AuthRequestWithChallenge<{ type: DeliveryType }>,
+    res: Response
+  ): Promise<void>;
 }

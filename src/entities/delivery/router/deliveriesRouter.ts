@@ -2,6 +2,11 @@ import { Router } from "express";
 import DeliveryController from "../controller/DeliveryController.js";
 import DeliveryDrizzleRepository from "../repository/DeliveryDrizzleRepository.js";
 import checkChallenge from "../middleware/checkChallenge.js";
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+
+const upload = multer({ storage });
 
 const deliveriesRouter = Router();
 
@@ -12,6 +17,12 @@ deliveriesRouter.get(
   "/:challengeNumber",
   checkChallenge,
   deliveryController.get
+);
+deliveriesRouter.post(
+  "/file/:challengeNumber",
+  checkChallenge,
+  upload.single("file"),
+  deliveryController.postFile
 );
 deliveriesRouter.post(
   "/:challengeNumber",
