@@ -5,7 +5,8 @@ export interface DeliveryRepository {
   getByChallenge(
     challengeNumber: number,
     exerciseId: Id,
-    userId: Id
+    userId: Id,
+    student?: string
   ): Promise<Delivery[]>;
   addTextDelivery(
     userId: Id,

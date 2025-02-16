@@ -8,7 +8,10 @@ const checkChallenge = (
 ): void => {
   const { challengeNumber } = req.params;
 
-  if (req.user.maxChallenge < Number(challengeNumber)) {
+  if (
+    req.user.role === "student" &&
+    req.user.maxChallenge < Number(challengeNumber)
+  ) {
     res.status(403).json({ error: "Forbidden challenge" });
     return;
   }

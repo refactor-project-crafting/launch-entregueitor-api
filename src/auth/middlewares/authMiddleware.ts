@@ -32,7 +32,11 @@ const authMiddleware = async (
   const flags = await flagsmith.getIdentityFlags(username);
   const maxChallengeNumber = flags.getFeatureValue("challenge-number");
 
-  req.user = { ...data.user, maxChallenge: maxChallengeNumber };
+  req.user = {
+    ...data.user,
+    maxChallenge: maxChallengeNumber,
+    role: username === "the-refactor-project" ? "admin" : "student",
+  };
 
   next();
 };

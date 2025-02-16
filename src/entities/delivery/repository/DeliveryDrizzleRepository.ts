@@ -13,7 +13,8 @@ class DeliveryDrizzleRepository implements DeliveryRepository {
   public async getByChallenge(
     challengeNumber: number,
     exerciseId: Id,
-    userId: Id
+    userId: Id,
+    student?: string
   ): Promise<Delivery[]> {
     const deliveriesDto: DeliveryDto[] = await db
       .select({
@@ -27,7 +28,7 @@ class DeliveryDrizzleRepository implements DeliveryRepository {
       )
       .where(
         and(
-          eq(deliveriesTable.studentId, userId),
+          eq(deliveriesTable.studentId, student ? student : userId),
           eq(deliveriesTable.challenge, challengeNumber),
           eq(deliveriesTable.exerciseId, exerciseId)
         )

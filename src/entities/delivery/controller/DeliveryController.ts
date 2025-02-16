@@ -17,16 +17,20 @@ class DeliveryController implements DeliveryControllerStructure {
   }
 
   async get(
-    req: AuthRequestWithChallenge<unknown, { exerciseId: string }>,
+    req: AuthRequestWithChallenge<
+      unknown,
+      { exerciseId: string; student?: string }
+    >,
     res: Response
   ): Promise<void> {
     const { challengeNumber } = req.params;
-    const { exerciseId } = req.query;
+    const { student, exerciseId } = req.query;
 
     const deliveries = await this.deliveryRepository.getByChallenge(
       Number(challengeNumber),
       exerciseId,
-      req.user.id
+      req.user.id,
+      req.user.role === "admin" ? student : undefined
     );
 
     res.status(200).json({ deliveries });
