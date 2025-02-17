@@ -5,6 +5,8 @@ import deliveriesRouter from "../entities/delivery/router/deliveriesRouter.js";
 import authMiddleware from "../auth/middlewares/authMiddleware.js";
 import exercisesRouter from "../entities/exercise/router/exercisesRouter.js";
 import isBackupNeeded from "../database/backup/middleware.js";
+import studentsRouter from "../entities/students/router/studentsRouter.js";
+import adminMiddleware from "../auth/middlewares/adminMiddleware.js";
 
 const app = express();
 
@@ -20,5 +22,8 @@ app.get("/", (_req, res) => {
 app.use(authMiddleware);
 app.use("/deliveries", deliveriesRouter);
 app.use("/exercises", exercisesRouter);
+
+app.use(adminMiddleware);
+app.use("/students", studentsRouter);
 
 export default app;
