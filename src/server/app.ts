@@ -13,6 +13,10 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(isBackupNeeded);
 
+app.get("/", (_req, res) => {
+  res.status(200).json({ ok: true });
+});
+
 app.use(authMiddleware);
 app.use("/deliveries", deliveriesRouter);
 app.use("/exercises", exercisesRouter);
