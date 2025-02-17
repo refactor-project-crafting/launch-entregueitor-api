@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Response } from "express";
 import {
   AuthRequestWithChallenge,
@@ -5,12 +6,18 @@ import {
 } from "./types.js";
 import DeliveryRepository from "../repository/types.js";
 import { DeliveryType, FileDelivery, FullDelivery } from "../types.js";
-import { WithoutId } from "../../../types.js";
+import { Id, WithoutId } from "../../../types.js";
 import { isTextDelivery, isUrlDelivery } from "../predicates.js";
 import { uploadFileToDrive } from "../../../drive/index.js";
+import axios from "axios";
+import { ExerciseRepository } from "../../exercise/repository/types.js";
+import { AuthRequest } from "../../../auth/middlewares/types.js";
 
 class DeliveryController implements DeliveryControllerStructure {
-  constructor(private deliveryRepository: DeliveryRepository) {
+  constructor(
+    private deliveryRepository: DeliveryRepository,
+    private exerciseRepository: ExerciseRepository
+  ) {
     this.get = this.get.bind(this);
     this.post = this.post.bind(this);
     this.postFile = this.postFile.bind(this);
@@ -60,6 +67,9 @@ class DeliveryController implements DeliveryControllerStructure {
       );
 
       res.status(201).json({ newDelivery: newTextDelivery });
+
+      await this.sendToZappier(req, type, challengeNumber, exerciseId);
+
       return;
     }
 
@@ -70,6 +80,9 @@ class DeliveryController implements DeliveryControllerStructure {
       );
 
       res.status(201).json({ newDelivery: newUrlDelivery });
+
+      await this.sendToZappier(req, type, challengeNumber, exerciseId);
+
       return;
     }
   }
@@ -110,7 +123,25 @@ class DeliveryController implements DeliveryControllerStructure {
       deliveryData as WithoutId<FileDelivery>
     );
 
+    await this.sendToZappier(req, "file", challengeNumber, exerciseId);
+
     res.status(201).json({ newDelivery: newFileDelivery });
+  }
+
+  private async sendToZappier(
+    req: AuthRequest,
+    type: DeliveryType,
+    challengeNumber: string,
+    exerciseId: Id
+  ) {
+    const exercise = await this.exerciseRepository.getById(exerciseId);
+
+    await axios.post(process.env.ZAPPIER_WEBHOOK!, {
+      username: req.user.user_metadata.user_name,
+      challengeNumber,
+      type,
+      exerciseName: exercise.name,
+    });
   }
 }
 

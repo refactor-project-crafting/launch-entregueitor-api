@@ -3,8 +3,18 @@ import { db } from "../../../database/index.js";
 import { exercises as exercisesTable } from "../schema/exercises.js";
 import { ExerciseStructure } from "../types.js";
 import { ExerciseRepository } from "./types.js";
+import { Id } from "../../../types.js";
 
 class ExerciseDrizzleRepository implements ExerciseRepository {
+  public async getById(exerciseId: Id): Promise<ExerciseStructure> {
+    const exercises = await db
+      .select()
+      .from(exercisesTable)
+      .where(eq(exercisesTable.id, exerciseId));
+
+    return exercises[0];
+  }
+
   public async getByChallenge(challenge: number): Promise<ExerciseStructure[]> {
     const exercises: ExerciseStructure[] = await db
       .select()
